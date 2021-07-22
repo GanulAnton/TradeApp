@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\OrderResource;
+use App\Http\Resources\UserResource;
 use App\Jobs\BuyOrder;
 use App\Jobs\SellOrder;
 use App\Models\Order;
@@ -17,19 +19,21 @@ class OrderController extends Controller
 
     public function getOrders(Request $request)
     {
-        $arr = [];
-        $this->makeOrders($arr, 'buy');
-        $this->makeOrders($arr, 'sell');
-        Order::insert($arr);
-        $users = User::all();
-        Notification::send($users, new OrderCreatedNotification($arr, 'order'));
-        return Order::where('order_type', $request->order_type)->get();
+
+        $order = Order::where('order_type', $request->order_type)->get();
+        return OrderResource::collection($order);
 
     }
 
     public function clearExistOrders()
     {
         Order::where('life_time' ,'<=', now())->delete();
+        $arr = [];
+        $this->makeOrders($arr, 'buy');
+        $this->makeOrders($arr, 'sell');
+        Order::insert($arr);
+        $users = User::all();
+        Notification::send($users, new OrderCreatedNotification($arr, 'order'));
     }
 
 
@@ -69,6 +73,6 @@ class OrderController extends Controller
 
            SellOrder::dispatch($order, $current_user);
         }
-        return $current_user;
+        return UserResource::make($current_user);
     }
 }
