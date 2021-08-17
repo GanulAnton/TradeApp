@@ -19,6 +19,7 @@ class OrderObserver
      */
     public function creating(Order $order)
     {
+	//SELECT * FROM users;   
         $users = User::all();
         Notification::send($users, new OrderCreatedNotification($order, 'order'));
     }
@@ -42,6 +43,7 @@ class OrderObserver
      */
     public function deleting(Order $order)
     {
+	//INSERT INTO orders('diamond_quantity','usd_quantity','rate','life_time','order_type') VALUES ('...');    
         $diamond_quantity = rand(1,500);
         $usd_quantity  = rand(1,500);
         $new_order = new Order();
@@ -51,7 +53,6 @@ class OrderObserver
         $new_order->life_time = Carbon::now()->add(10800,'seconds');
         $new_order->order_type = $order->order_type;
         $new_order->save();
-
     }
 
     /**

@@ -39,11 +39,14 @@ class SellOrder implements ShouldQueue
     {
         $current_user = $this->user;
         $order = $this->order;
+        //SELECT * FROM users;
         $users = User::all();
+        //UPDATE users ('diamond_balance', 'usd_balance') SET ('$current_user->diamond_balance - $order->diamond_quantity', '$current_user->usd_balance + $order->usd_quantity');
         $this->user->update([
             'diamond_balance' => $current_user->diamond_balance - $order->diamond_quantity,
             'usd_balance' =>  $current_user->usd_balance + $order->usd_quantity,
         ]);
+        //DELETE FROM order WHERE id = $order->id;
         $this->order->delete();
         $balance_data = [
             'user_id' => $current_user->id,

@@ -10,9 +10,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('register', [AuthController::class,'register']);
 Route::post('login', [AuthController::class,'login']);
 
-
 Route::middleware(['auth:api'])->group(function () {
-
     Route::delete('orders',[OrderController::class, 'clearExistOrders']);
     Route::get('logout', [AuthController::class, 'logout']);
     Route::get('orders',[OrderController::class,'getOrders']);
