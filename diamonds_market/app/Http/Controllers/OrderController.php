@@ -11,7 +11,6 @@ use App\Models\User;
 use App\Notifications\OrderCreatedNotification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 
 class OrderController extends Controller
